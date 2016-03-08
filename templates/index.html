@@ -15,6 +15,9 @@
         <span class="mr10">
           Username: <input type="text" name="username" value="{{ username }}" />
         </span>
+        <span class="mr10">
+          Caption: <input type="text" name="caption" value="{{ caption }}" />
+        </span>
         <span>
           Media type:
           <select name="media_type">
@@ -35,9 +38,9 @@
           <li class="fl-l mv5 mr10">
             <a href="{{ media.url }}">
               {% if media.media_type == 0 %}
-                <img src="{{ media.low_resolution_url }}">
+                <img src="{{ media.low_resolution_url }}" title="{{ media.caption }}" />
               {% else %}
-                <video width="320" height="320" controls>
+                <video width="320" height="320" controls title="{{ media.caption }}">
                   <source src="{{ media.low_resolution_url }}">
                 </video>
               {% endif %}

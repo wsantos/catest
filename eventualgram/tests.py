@@ -154,6 +154,25 @@ class TestViews(TestCase):
         self.assertTrue(image in context['media_page'])
         self.assertTrue(video in context['media_page'])
 
+    @mock.patch('eventualgram.views.render')
+    def test_filter_by_caption(self, render):
+        """If a caption search is provided, results are filtered."""
+        matching = InstagramMedia.objects.create(
+            media_type=IMAGE,
+            caption='Great pic!')
+        not_matching = InstagramMedia.objects.create(
+            media_type=VIDEO,
+            caption='LOL')
+        request = HttpRequest()
+        request.GET = QueryDict('caption=pic')
+
+        views.index(request)
+
+        self.assertEqual(render.call_count, 1)
+        _, _, context = render.call_args[0]
+        self.assertTrue(matching in context['media_page'])
+        self.assertFalse(not_matching in context['media_page'])
+
     def test_no_results(self):
         """If filters provide no results, show a message."""
         InstagramMedia.objects.create(media_type=IMAGE, username='foo')
