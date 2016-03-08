@@ -17,15 +17,18 @@ def index(request):
     `caption` -> filters the results to those that include the given text in
                  their caption.
     """
+    # Use empty template if no InstagramMedia are loaded.
     if not InstagramMedia.objects.all().exists():
         return render(request, 'empty.html', {})
 
     media_list = InstagramMedia.objects.all()
 
+    # Filter media list by username.
     username = request.GET.get('username', '')
     if username:
         media_list = media_list.filter(username=username)
 
+    # Filter media list by media type.
     try:
         media_type = int(request.GET.get('media_type', None))
     except (ValueError, TypeError):
@@ -33,10 +36,12 @@ def index(request):
     if media_type is not None and media_type in MEDIA_TYPE_MAP.values():
         media_list = media_list.filter(media_type=media_type)
 
+    # Filter media list by caption.
     caption = request.GET.get('caption', None)
     if caption is not None:
         media_list = media_list.filter(caption__icontains=caption)
 
+    # Paginate media list.
     paginator = Paginator(media_list, MEDIA_PER_PAGE)
     page_number = request.GET.get('page', 1)
     try:
@@ -46,9 +51,11 @@ def index(request):
     except EmptyPage:
         media_page = paginator.page(paginator.num_pages)
 
+    # Ship it.
     context = {
         'media_page': media_page,
         'username': username,
         'media_type': media_type,
+        'caption': caption,
     }
     return render(request, 'index.html', context)
