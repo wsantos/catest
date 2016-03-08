@@ -8,30 +8,38 @@
   </head>
 
   <body>
-    <ul class="mt10">
-      {% for media in media_page %}
-        <li class="fl-l mv5 mr10">
-          <a href="{{ media.
-          {% if media.media_type == 0 %}
-            <img src="{{ media.low_resolution_url }}">
-          {% else %}
-            <video width="320" height="320" controls>
-              <source src="{{ media.low_resolution_url }}">
-            </video>
-          {% endif %}
-        </li>
-      {% endfor %}
-    </ul>
+    {% if media_page %}
+      <ul class="mt10">
+        {% for media in media_page %}
+          <li class="fl-l mv5 mr10">
+            <a href="{{ media.url }}">
+              {% if media.media_type == 0 %}
+                <img src="{{ media.low_resolution_url }}">
+              {% else %}
+                <video width="320" height="320" controls>
+                  <source src="{{ media.low_resolution_url }}">
+                </video>
+              {% endif %}
+            </a>
+            <div>By <a href="?username={{ media.username }}">{{ media.username }}</a></div>
+          </li>
+        {% endfor %}
+      </ul>
 
-    <div class="center-text clear">
-      {% if media_page.has_previous %}
-        <a href="?page={{ media_page.previous_page_number }}">previous</a>
-      {% endif %}
-      Page  {{ media_page.number }} of {{ media_page.paginator.num_pages }}
-      {% if media_page.has_next %}
-        <a href="?page={{ media_page.next_page_number }}">next</a>
-      {% endif %}
-    </div>
+      <div class="center-text clear">
+        {% if media_page.has_previous %}
+          <a href="?page={{ media_page.previous_page_number }}">previous</a>
+        {% endif %}
+        Page  {{ media_page.number }} of {{ media_page.paginator.num_pages }}
+        {% if media_page.has_next %}
+          <a href="?page={{ media_page.next_page_number }}">next</a>
+        {% endif %}
+      </div>
+
+    {% else %}
+      <div class="center-text">No results found.</div>
+    {% endif %}
+
   </body>
 
 </html>

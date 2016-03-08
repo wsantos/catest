@@ -86,6 +86,34 @@ class TestViews(TestCase):
         _, _, context = render.call_args[0]
         self.assertEqual(context['media_page'].number, 2)
 
+    @mock.patch('eventualgram.views.render')
+    def test_filter_by_username(self, render):
+        """If a username is provided, results are filtered by that name."""
+        foo_media = InstagramMedia.objects.create(
+            media_type=IMAGE, username='foo')
+        bar_media = InstagramMedia.objects.create(
+            media_type=IMAGE, username='bar')
+        request = HttpRequest()
+        request.GET = QueryDict('username=foo')
+
+        views.index(request)
+
+        self.assertEqual(render.call_count, 1)
+        _, _, context = render.call_args[0]
+        self.assertTrue(foo_media in context['media_page'])
+        self.assertFalse(bar_media in context['media_page'])
+
+    def test_no_results(self):
+        """If filters provide no results, show a message."""
+        InstagramMedia.objects.create(media_type=IMAGE, username='foo')
+
+        request = HttpRequest()
+        request.GET = QueryDict('username=bar')
+
+        response = views.index(request)
+
+        self.assertContains(response, 'No results found.')
+
 
 class TestLoadMedia(TestCase):
     """Tests for the load_media command."""
