@@ -8,6 +8,14 @@
   </head>
 
   <body>
+
+    <div class="center-text">
+      <p class="mb10">Filter your results:</p>
+      <form method="GET" action="">
+        Username: <input type="text" name="username" value="{{ username }}">
+      </form>
+    </div>
+
     {% if media_page %}
       <ul class="mt10">
         {% for media in media_page %}

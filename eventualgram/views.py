@@ -13,8 +13,8 @@ def index(request):
 
     media_list = InstagramMedia.objects.all()
 
-    username = request.GET.get('username', None)
-    if username is not None:
+    username = request.GET.get('username', '')
+    if username:
         media_list = media_list.filter(username=username)
 
     paginator = Paginator(media_list, MEDIA_PER_PAGE)
@@ -28,5 +28,6 @@ def index(request):
 
     context = {
         'media_page': media_page,
+        'username': username,
     }
     return render(request, 'index.html', context)
