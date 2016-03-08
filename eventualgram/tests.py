@@ -183,8 +183,3 @@ class TestViews(TestCase):
         response = views.index(request)
 
         self.assertContains(response, 'No results found.')
-
-
-class TestLoadMedia(TestCase):
-    """Tests for the load_media command."""
-
