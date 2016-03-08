@@ -12,7 +12,20 @@
     <div class="center-text">
       <p class="mb10">Filter your results:</p>
       <form method="GET" action="">
-        Username: <input type="text" name="username" value="{{ username }}">
+        <span class="mr10">
+          Username: <input type="text" name="username" value="{{ username }}" />
+        </span>
+        <span>
+          Media type:
+          <select name="media_type">
+            <option value="" {% if not media_type %}selected{% endif %}>All</option>
+            <option value="0" {% if media_type == 0 %}selected{% endif %}>Image</option>
+            <option value="1" {% if media_type == 1 %}selected{% endif %}>Video</option>
+          </select>
+        </span>
+        <div class="mt10">
+          <input type="submit" value="Filter" />
+        </div>
       </form>
     </div>
 

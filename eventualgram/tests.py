@@ -3,7 +3,7 @@ from django.test import TestCase
 import mock
 
 from eventualgram import views
-from eventualgram.constants import IMAGE
+from eventualgram.constants import IMAGE, VIDEO
 from eventualgram.models import InstagramMedia
 
 
@@ -102,6 +102,57 @@ class TestViews(TestCase):
         _, _, context = render.call_args[0]
         self.assertTrue(foo_media in context['media_page'])
         self.assertFalse(bar_media in context['media_page'])
+
+    @mock.patch('eventualgram.views.render')
+    def test_filter_by_media_type(self, render):
+        """If a media_type is provided, results are filtered by that type."""
+        image = InstagramMedia.objects.create(media_type=IMAGE)
+        video = InstagramMedia.objects.create(media_type=VIDEO)
+        request = HttpRequest()
+        request.GET = QueryDict('media_type=1')
+
+        views.index(request)
+
+        self.assertEqual(render.call_count, 1)
+        _, _, context = render.call_args[0]
+        self.assertFalse(image in context['media_page'])
+        self.assertTrue(video in context['media_page'])
+
+    @mock.patch('eventualgram.views.render')
+    def test_text_media_type(self, render):
+        """If an invalid media_type is provided, it is ignored.
+
+        All media types are shown if an invalid type is provided.
+        """
+        image = InstagramMedia.objects.create(media_type=IMAGE)
+        video = InstagramMedia.objects.create(media_type=VIDEO)
+        request = HttpRequest()
+        request.GET = QueryDict('media_type=3Dvideo')
+
+        views.index(request)
+
+        self.assertEqual(render.call_count, 1)
+        _, _, context = render.call_args[0]
+        self.assertTrue(image in context['media_page'])
+        self.assertTrue(video in context['media_page'])
+
+    @mock.patch('eventualgram.views.render')
+    def test_invalid_media_type(self, render):
+        """If an invalid media_type is provided, it is ignored.
+
+        All media types are shown if an invalid type is provided.
+        """
+        image = InstagramMedia.objects.create(media_type=IMAGE)
+        video = InstagramMedia.objects.create(media_type=VIDEO)
+        request = HttpRequest()
+        request.GET = QueryDict('media_type=2')
+
+        views.index(request)
+
+        self.assertEqual(render.call_count, 1)
+        _, _, context = render.call_args[0]
+        self.assertTrue(image in context['media_page'])
+        self.assertTrue(video in context['media_page'])
 
     def test_no_results(self):
         """If filters provide no results, show a message."""

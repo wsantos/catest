@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
-from eventualgram.constants import MEDIA_PER_PAGE
+from eventualgram.constants import MEDIA_PER_PAGE, MEDIA_TYPE_MAP
 from eventualgram.models import InstagramMedia
 
 
@@ -17,6 +17,13 @@ def index(request):
     if username:
         media_list = media_list.filter(username=username)
 
+    try:
+        media_type = int(request.GET.get('media_type', None))
+    except (ValueError, TypeError):
+        media_type = None
+    if media_type is not None and media_type in MEDIA_TYPE_MAP.values():
+        media_list = media_list.filter(media_type=media_type)
+
     paginator = Paginator(media_list, MEDIA_PER_PAGE)
     page_number = request.GET.get('page', 1)
     try:
@@ -29,5 +36,6 @@ def index(request):
     context = {
         'media_page': media_page,
         'username': username,
+        'media_type': media_type,
     }
     return render(request, 'index.html', context)
