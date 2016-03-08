@@ -9,13 +9,14 @@
 
   <body>
     <ul class="mt10">
-      {% for image in images %}
+      {% for media in media_page %}
         <li class="fl-l mv5 mr10">
-          {% if image.media_type == 0 %}
-            <img src="{{ image.low_resolution_url }}">
+          <a href="{{ media.
+          {% if media.media_type == 0 %}
+            <img src="{{ media.low_resolution_url }}">
           {% else %}
             <video width="320" height="320" controls>
-              <source src="{{ image.low_resolution_url }}">
+              <source src="{{ media.low_resolution_url }}">
             </video>
           {% endif %}
         </li>
@@ -23,12 +24,12 @@
     </ul>
 
     <div class="center-text clear">
-      {% if images.has_previous %}
-        <a href="?page={{ images.previous_page_number }}">previous</a>
+      {% if media_page.has_previous %}
+        <a href="?page={{ media_page.previous_page_number }}">previous</a>
       {% endif %}
-      Page  {{ images.number }} of {{ images.paginator.num_pages }}
-      {% if images.has_next %}
-        <a href="?page={{ images.next_page_number }}">next</a>
+      Page  {{ media_page.number }} of {{ media_page.paginator.num_pages }}
+      {% if media_page.has_next %}
+        <a href="?page={{ media_page.next_page_number }}">next</a>
       {% endif %}
     </div>
   </body>

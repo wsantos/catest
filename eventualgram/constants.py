@@ -12,4 +12,4 @@ MEDIA_TYPE_MAP = {
     'video': VIDEO,
 }
 
-IMAGES_PER_PAGE = 6
+MEDIA_PER_PAGE = 6

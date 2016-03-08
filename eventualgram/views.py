@@ -3,26 +3,26 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
-from eventualgram.constants import IMAGES_PER_PAGE
+from eventualgram.constants import MEDIA_PER_PAGE
 from eventualgram.models import InstagramMedia
 
 
 def index(request):
-    image_list = InstagramMedia.objects.all()
-    if not image_list.exists():
+    media_list = InstagramMedia.objects.all()
+    if not media_list.exists():
         return render(request, 'empty.html', {})
 
-    paginator = Paginator(image_list, IMAGES_PER_PAGE)
+    paginator = Paginator(media_list, MEDIA_PER_PAGE)
 
     page_number = request.GET.get('page', 1)
     try:
-        images = paginator.page(page_number)
+        media_page = paginator.page(page_number)
     except PageNotAnInteger:
-        images = paginator.page(1)
+        media_page = paginator.page(1)
     except EmptyPage:
-        images = paginator.page(paginator.num_pages)
+        media_page = paginator.page(paginator.num_pages)
 
     context = {
-        'images': images,
+        'media_page': media_page,
     }
     return render(request, 'index.html', context)

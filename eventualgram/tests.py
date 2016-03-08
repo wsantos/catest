@@ -43,7 +43,7 @@ class TestViews(TestCase):
 
         self.assertEqual(render.call_count, 1)
         _, _, context = render.call_args[0]
-        self.assertEqual(context['images'].number, 1)
+        self.assertEqual(context['media_page'].number, 1)
 
     @mock.patch('eventualgram.views.render')
     def test_non_integer_page_number(self, render):
@@ -56,12 +56,12 @@ class TestViews(TestCase):
 
         self.assertEqual(render.call_count, 1)
         _, _, context = render.call_args[0]
-        self.assertEqual(context['images'].number, 1)
+        self.assertEqual(context['media_page'].number, 1)
 
     @mock.patch('eventualgram.views.render')
     def test_page_number_too_large(self, render):
-        """If the page number goes past the last image, the last page is rendered."""
-        while InstagramMedia.objects.count() <= views.IMAGES_PER_PAGE:
+        """If the page number goes past the last media, the last page is rendered."""
+        while InstagramMedia.objects.count() <= views.MEDIA_PER_PAGE:
             InstagramMedia.objects.create(media_type=IMAGE)
         request = HttpRequest()
         request.GET = QueryDict('page=9999')
@@ -70,12 +70,12 @@ class TestViews(TestCase):
 
         self.assertEqual(render.call_count, 1)
         _, _, context = render.call_args[0]
-        self.assertEqual(context['images'].number, 2)
+        self.assertEqual(context['media_page'].number, 2)
 
     @mock.patch('eventualgram.views.render')
     def test_valid_page_number(self, render):
         """If valid page number is specified, that page is rendered."""
-        while InstagramMedia.objects.count() <= views.IMAGES_PER_PAGE:
+        while InstagramMedia.objects.count() <= views.MEDIA_PER_PAGE:
             InstagramMedia.objects.create(media_type=IMAGE)
         request = HttpRequest()
         request.GET = QueryDict('page=2')
@@ -84,7 +84,7 @@ class TestViews(TestCase):
 
         self.assertEqual(render.call_count, 1)
         _, _, context = render.call_args[0]
-        self.assertEqual(context['images'].number, 2)
+        self.assertEqual(context['media_page'].number, 2)
 
 
 class TestLoadMedia(TestCase):
