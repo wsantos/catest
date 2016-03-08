@@ -1,0 +1,58 @@
+body {
+  width: 1024px;
+  display: block;
+  margin: 0 auto;
+}
+
+.fl-l {
+  float: left; 
+}
+
+.clear {
+  clear: left;
+}
+
+
+.mt5, .ma5, .mv5 {
+  margin-top: 5px !important;
+}
+
+.mr5, .ma5, .mh5 {
+  margin-right: 5px !important;
+}
+
+.ml5, .ma5, .mh5 {
+  margin-left: 5px !important;
+}
+
+.mb5, .ma5, .mv5 {
+  margin-bottom: 5px !important;
+}
+
+
+.mt10, .ma10, .mv10 {
+  margin-top: 10px !important;
+}
+
+.mr10, .ma10, .mh10 {
+  margin-right: 10px !important;
+}
+
+.ml10, .ma10, .mh10 {
+  margin-left: 10px !important;
+}
+
+.mb10, .ma10, .mv10 {
+  margin-bottom: 10px !important;
+}
+
+
+.b1 {
+  border: 1px solid;
+}
+
+
+.center-text {
+  width: 1024px;
+  text-align: center;
+}
